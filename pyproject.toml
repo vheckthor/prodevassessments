@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "prodevassessment"
+version = "0.1.0"
+description = "Assessment tests from prodevs"
+authors = ["Dare Victor Adebayo <43048158+vheckthor@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95.0"
+alembic = "^1.10.2"
+uvicorn = "^0.21.1"
+pydantic = "^1.10.7"
+python-dotenv = "^1.0.0"
+sqlalchemy = "^2.0.7"
+jose = "^1.0.0"
+python-jose = "^3.3.0"
+passlib = "^1.7.4"
+psycopg2-binary = "^2.9.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
