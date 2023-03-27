@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.api.api_v1.endpoints.user import user_router
+from app.api.api_v1.endpoints.accounts import account_router
 
 from app.config import settings
 
@@ -25,7 +26,7 @@ def pro_dev_assessments() -> FastAPI:
         )
 
     assessments_app.include_router(user_router)
-    # quest_scheduler_app.include_router(psc_router)
+    assessments_app.include_router(account_router)
     return assessments_app
 
 

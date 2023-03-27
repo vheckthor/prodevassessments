@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy import Boolean, Column, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 
@@ -21,3 +22,10 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
+    account= relationship(
+        "Account",
+        foreign_keys="Account.user_id",
+        uselist=True,
+        viewonly= True,
+        cascade="all, delete-orphan"
+    )

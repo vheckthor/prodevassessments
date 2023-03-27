@@ -16,10 +16,10 @@ from app.api.depends import get_db, get_current_active_user
 from app.schemas.user_schema import UserRequest, UserAuthRequest, UserResponse, UserSchema
 
 
-user_router = APIRouter(dependencies=[Depends(get_db)])
+user_router = APIRouter(dependencies=[Depends(get_db)], tags=["User"])
 
 
-@user_router.post("/createuser", tags=["create"], response_model=UserResponse, status_code=201)
+@user_router.post("/createuser", response_model=UserResponse, status_code=201)
 async def create_user(request: UserRequest, session: Session = Depends(get_db)):
     """create a user api endpoint"""
     logging.info("Creating user")
@@ -37,7 +37,7 @@ async def create_user(request: UserRequest, session: Session = Depends(get_db)):
     return JSONResponse(json_response, status_code=201)
 
 
-@user_router.put("/updateuser", tags=["update"], response_model=UserResponse, status_code=202)
+@user_router.put("/updateuser", response_model=UserResponse, status_code=202)
 async def update_user(request: UserRequest, request_obj: Request, session: Session = Depends(get_db)):
     """ update user api endpoint"""
     logging.info("Updating user")
@@ -61,7 +61,7 @@ async def update_user(request: UserRequest, request_obj: Request, session: Sessi
     return JSONResponse(json_response, status_code=202)
 
 
-@user_router.post("/authenticate", tags=["authenticate"], status_code=202)
+@user_router.post("/authenticate", status_code=202)
 async def authenticate_user(request: UserAuthRequest, session: Session = Depends(get_db)):
     """ authenticate user api endpoint"""
     logging.info("authenticate user")
@@ -84,7 +84,7 @@ async def authenticate_user(request: UserAuthRequest, session: Session = Depends
     return JSONResponse(token_auth, status_code=200)
 
 
-@user_router.get("/getuser/{userid}", tags=["get"], response_model=UserResponse, status_code=200)
+@user_router.get("/getuser/{userid}", response_model=UserResponse, status_code=200)
 async def get_user(userid: str, session: Session = Depends(get_db)):
     """ get user api endpoint"""
     logging.info("get user")
@@ -97,7 +97,7 @@ async def get_user(userid: str, session: Session = Depends(get_db)):
     return JSONResponse(json_response, status_code=200)
 
 
-@user_router.delete("/getuser/{userid}", tags=["get"], response_model=UserResponse, status_code=200)
+@user_router.delete("/deleteuser/{userid}", response_model=UserResponse, status_code=200)
 async def delete_user(userid: str, session: Session = Depends(get_db)):
     """ delete user api endpoint"""
     logging.info("delete user")
