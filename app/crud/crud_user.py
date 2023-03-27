@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.security import get_password_hash, verify_password
 from app.crud.base import CrudBase
 from app.models.user import User
+from app.config.loggers import log_error
 
 
 
@@ -15,15 +16,20 @@ class CrudUser(CrudBase[User]):
 
     def create(self, db: Session, *, obj_in) -> User:
         db_obj = User(
+            id=obj_in.id,
             email=obj_in.email,
             hashed_password=get_password_hash(obj_in.password),
             phone_number=obj_in.phone_number,
-            is_active=obj_in.is_active,
+            first_name=obj_in.first_name,
+            last_name=obj_in.last_name
         )
-
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+        try:
+            db.add(db_obj)
+            db.commit()
+            db.refresh(db_obj)
+        except Exception as e_x:
+            log_error(e_x)
+            return None
         return db_obj
 
     def update(self, db: Session, *, db_obj: User, obj_in) -> User:
@@ -43,9 +49,13 @@ class CrudUser(CrudBase[User]):
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
 
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+        try:
+            db.add(db_obj)
+            db.commit()
+            db.refresh(db_obj)
+        except Exception as e_x:
+            log_error(e_x)
+            return None
         return db_obj
 
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:

@@ -1,17 +1,18 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
-from graphene import InputObjectType
+
 from sqlalchemy.orm import Session
 
 from app.db.base_class import Base
 
+from app.config.loggers import log_error
+
 ModelType = TypeVar("ModelType", bound=Base)
-CreateSchemaType = TypeVar("CreateSchemaType", bound=InputObjectType)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=InputObjectType)
 
 
-class CrudBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+
+class CrudBase(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
@@ -31,7 +32,7 @@ class CrudBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     ) -> List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
 
-    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
+    def create(self, db: Session, *, obj_in) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore
 
@@ -45,7 +46,7 @@ class CrudBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db: Session,
         *,
         db_obj: ModelType,
-        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+        obj_in:  Dict[str, Any]
     ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
@@ -63,5 +64,9 @@ class CrudBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def delete(self, db: Session, *, db_obj: ModelType) -> ModelType:
         db.delete(db_obj)
-        db.commit()
+        try:
+            db.commit()
+        except Exception as e_x:
+            log_error(e_x)
+            return None
         return db_obj
