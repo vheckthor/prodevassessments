@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel, Field, root_validator, validator
+from pydantic import BaseModel, root_validator, validator
 from app.core.account_number_generator import generate_random_account
 
 
