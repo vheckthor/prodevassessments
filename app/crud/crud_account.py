@@ -20,9 +20,9 @@ class CrudAccount(CrudBase[Account]):
             .all()
         )
 
-    def get_by_account_number(self,db: Session,account_number: str) -> Optional[Account]:
+    def get_by_account_number(self,db: Session,account_number: str, user_id: UUID) -> Optional[Account]:
         return (
-            db.query(Account).filter(Account.account_number == account_number).first()
+            db.query(Account).filter(Account.account_number == account_number, Account.user_id == user_id).first()
         )
     
 

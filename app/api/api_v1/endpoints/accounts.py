@@ -17,10 +17,10 @@ from app.api.depends import get_db
 from app.schemas.account_schema import AccountRequest, AccountResponse, AccountSchema, AllUserAccountResponse
 from app.core.security_decorators import auth_required
 
-account_router = APIRouter(dependencies=[Depends(get_db)])
+account_router = APIRouter(prefix="/accounts",dependencies=[Depends(get_db)])
 
 
-@account_router.post("/createaccount", tags=["createaccount"], response_model=AccountResponse, status_code=201)
+@account_router.post("",tags=["createaccount"], response_model=AccountResponse, status_code=201)
 @auth_required
 async def create_account(payload: AccountRequest,
                          request_obj: Request,
@@ -43,31 +43,9 @@ async def create_account(payload: AccountRequest,
     return JSONResponse(json_response, status_code=201)
 
 
-# @account_router.put("/updateaccount", tags=["update"], response_model=accountResponse, status_code=202)
-# async def update_account(request: accountRequest, request_obj: Request, session: Session = Depends(get_db)):
-#     """ update account api endpoint"""
-#     logging.info("Updating account")
-#     data = {**request.dict(), "id": uuid.uuid4()}
-#     request_data = accountSchema(**data)
-#     try:
-#         current_account = get_current_active_account(session, request_obj)
-#     except (ValueError, ValidationError, Exception) as e_x:
-#         log_error(e_x)
-#         return JSONResponse({"Error": "Unable to authenticate account"}, status_code=400)
-#     response = account.update(
-#         db=session,  db_obj=current_account, obj_in=request_data)
-#     if response is None:
-#         error_message = {
-#             "error_message": "An error occurred unable to update account"}
-#         logging.error("Error updating an account.")
-#         return JSONResponse(error_message, status_code=400)
-#     response_dict = response.__dict__
-#     resp = {**response_dict, "id": str(response_dict["id"])}
-#     json_response = accountResponse(**resp).dict()
-#     return JSONResponse(json_response, status_code=202)
 @account_router.get("/all",
-                    tags=["get_with_account_number"],
-                    response_model=AccountResponse, status_code=200)
+                    tags=["get all user account"],
+                    response_model=AllUserAccountResponse, status_code=200)
 @auth_required
 async def get_all_account(
     request_obj: Request,
@@ -76,20 +54,19 @@ async def get_all_account(
 ):
     """get all account"""
     logging.info("get account")
-    print(user_id)
     response = account.get_by_account_owner_id(db=session, user_id=user_id)
-    print(len(response))
     if response is None:
-        return JSONResponse({"Error": "account not found"}, status_code=404)
+        return JSONResponse({"Error": "accounts not found"}, status_code=404)
     resp = [AccountResponse(account_number=acc.account_number,
                             account_type=acc.account_type).dict() for acc in response]
     json_response = resp
     return JSONResponse(json_response, status_code=200)
 
 
-@account_router.get("/getaccount/{account_number}",
-                    tags=["get_with_account_number"],
+@account_router.get("/{account_number}",
+                    tags=["get with account number"],
                     response_model=AccountResponse, status_code=200)
+@auth_required
 async def get_account(account_number: str,
                       request_obj: Request,
                       user_id: Optional[UUID] = None,
@@ -97,16 +74,16 @@ async def get_account(account_number: str,
     """ get account api endpoint"""
     logging.info("get account")
     response = account.get_by_account_number(
-        db=session, account_number=account_number)
+        db=session, account_number=account_number, user_id=user_id)
     if response is None:
         return JSONResponse({"Error": "account not found"}, status_code=404)
     response_dict = response.__dict__
-    resp = {**response_dict, "id": str(response_dict["id"])}
+    resp = {**response_dict}
     json_response = AccountResponse(**resp).dict()
     return JSONResponse(json_response, status_code=200)
 
 
-@account_router.delete("/deleteaccount/{account_number}", tags=["get"], status_code=200)
+@account_router.delete("/{account_number}", tags=["delete"], status_code=200)
 @auth_required
 async def delete_account(account_number: str,
                          request_obj: Request,
@@ -115,7 +92,7 @@ async def delete_account(account_number: str,
     """ delete account api endpoint"""
     logging.info("delete account")
     account_to_delete = account.get_by_account_number(
-        db=session, account_number=account_number)
+        db=session, account_number=account_number, user_id=user_id)
     if account_to_delete is None:
         return JSONResponse({"Error": "unable to delete account not found"}, status_code=404)
     deleted = account.delete(db=session, db_obj=account_to_delete) is not None
