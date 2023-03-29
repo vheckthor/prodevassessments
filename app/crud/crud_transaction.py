@@ -15,7 +15,7 @@ class CrudTransaction(CrudBase[Transaction]):
                                       account_id: UUID,
                                       transaction_description: str,
                                       skip: int = 0,
-                                      limit: int = 5,) -> Tuple(int, Optional[List[Transaction]]):
+                                      limit: int = 5,) -> Tuple[int, Optional[List[Transaction]]]:
         
         search_param = f"%{transaction_description}%"
         db_lazy_query = db.query(Transaction).filter(
