@@ -1,16 +1,14 @@
-import uuid
 from datetime import datetime
 from re import sub
 
 from sqlalchemy import Column, DateTime, text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
+from sqlalchemy.ext.declarative import as_declarative, declared_attr
 
 
 @as_declarative()
 class Base:
-    # __allow_unmapped__ = True
-    date_created = Column(DateTime, default = datetime.now(), nullable = False)
+    date_created = Column(DateTime, default=datetime.now(), nullable=False)
     __name__: str
 
     @declared_attr
@@ -23,4 +21,3 @@ class Base:
             ).split()
         ).lower()
 
-# Base = declarative_base(cls=Base)

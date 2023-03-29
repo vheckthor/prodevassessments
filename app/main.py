@@ -5,6 +5,7 @@ from app.api.api_v1.endpoints.accounts import account_router
 
 from app.config import settings
 
+
 def pro_dev_assessments() -> FastAPI:
     """
     Returns a FastAPI app object.

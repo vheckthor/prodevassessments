@@ -6,11 +6,13 @@ from app.core.account_number_generator import generate_random_account
 
 class AccountRequest(BaseModel):
     account_type: str
+
     @validator("account_type")
     @classmethod
     def validate_account_type(cls, value: str):
         if value.lower() not in ["current", "savings"]:
-            raise ValueError("incorrect account type, account type must be savings or current")
+            raise ValueError(
+                "incorrect account type, account type must be savings or current")
         return value
 
 
@@ -28,7 +30,6 @@ class AccountResponse(BaseModel):
     def validate_transaction_date(cls, value):
         string_date_time = value.strftime("%Y/%m/%d, %H:%M:%S")
         return string_date_time
-
 
 
 class AllUserAccountResponse(BaseModel):

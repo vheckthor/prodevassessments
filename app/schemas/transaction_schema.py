@@ -13,15 +13,16 @@ class TransactionRequest(BaseModel):
     @classmethod
     def validate_transaction_type(cls, value: str):
         if value.lower() not in ["credit", "debit"]:
-            raise ValueError("incorrect transaction type, transaction type must be credit or debit")
+            raise ValueError(
+                "incorrect transaction type, transaction type must be credit or debit")
         return value
 
     @validator("transaction_amount")
     @classmethod
     def validate_transaction_amount(cls, value: float) -> float:
-        if value <=0.0:
+        if value <= 0.0:
             raise ValueError("transaction amount must be greater than 0")
-        
+
         return value
 
 
@@ -40,11 +41,12 @@ class TransactionResponse(BaseModel):
         string_date_time = value.strftime("%Y/%m/%d, %H:%M:%S")
         return string_date_time
 
+
 class AllAccountTransactionResponse(BaseModel):
     total_count: int
     total_number_of_pages: int
     current_page: int
-    next_page : int
+    next_page: int
     limit: int
     all_transactions: list[TransactionResponse]
 

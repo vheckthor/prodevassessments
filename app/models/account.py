@@ -24,10 +24,10 @@ class Account(Base):
     user = relationship(
         "User", foreign_keys=[user_id]
     )
-    transaction= relationship(
+    transaction = relationship(
         "Transaction",
         foreign_keys="Transaction.account_id",
         uselist=True,
-        viewonly= True,
+        viewonly=True,
         cascade="all, delete-orphan"
     )

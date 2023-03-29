@@ -7,6 +7,7 @@ import logging
 
 log = logging.getLogger('ProdevsAssessments')
 
+
 def _get_caller_object_name():
     stack_trace = inspect.stack()[2][0]
     if 'self' in stack_trace.f_locals:

@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from pydantic import BaseSettings, AnyHttpUrl, validator
 from sqlalchemy import engine
 
+
 class Settings(BaseSettings):
     '''
     Application settings for api
@@ -16,13 +17,18 @@ class Settings(BaseSettings):
     PROJECT_NAME: Optional[str] = os.environ.get("PROJECT_NAME", "test")
     API_V1_STR: Optional[str] = os.environ.get("API_V1_STR", "/prodev")
     SECRET_KEY: str = os.environ.get("SECRET_KEY", "")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", "100"))
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
+        os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", "100"))
     FIRST_SUPERUSER: str = os.environ.get("FIRST_SUPERUSER", "victor")
-    FIRST_SUPERUSER_PASSWORD: str = os.environ.get("FIRST_SUPERUSER_PASSWORD", "password@123")
-    FIRST_SUPERUSER_PHONE: str = os.environ.get("FIRST_SUPERUSER_PHONE", "07039466998")
-    FIRST_SUPERUSER_EMAIL: str = os.environ.get("FIRST_SUPERUSER_EMAIL", "adebayovicktor@gmail.com")
+    FIRST_SUPERUSER_PASSWORD: str = os.environ.get(
+        "FIRST_SUPERUSER_PASSWORD", "password@123")
+    FIRST_SUPERUSER_PHONE: str = os.environ.get(
+        "FIRST_SUPERUSER_PHONE", "07039466998")
+    FIRST_SUPERUSER_EMAIL: str = os.environ.get(
+        "FIRST_SUPERUSER_EMAIL", "adebayovicktor@gmail.com")
     IPIFY_API_KEY: str = os.environ.get("IPIFY_API_KEY", "")
-    SQLALCHEMY_DATABASE_URI: Union[Optional[engine.url.URL], Optional[str]] = None
+    SQLALCHEMY_DATABASE_URI: Union[Optional[engine.url.URL],
+                                   Optional[str]] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, value: Optional[str], values: Dict[str, Any]) -> Any:  # pylint: disable=no-self-argument

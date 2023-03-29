@@ -143,23 +143,24 @@ async def perform_transactions(payload: TransactionRequest,
 @account_router.get("/{id}/transactions", response_model=AllAccountTransactionResponse, status_code=200)
 @auth_required
 async def get_list_transactions(
-                                request_obj: Request,
-                                id: str,
-                                user_id: Optional[UUID] = None,
-                                search: Optional[str]="",
-                                page_mumber: Optional[int]=1,
-                                limit: Optional[int]=50,
-                                session: Session = Depends(get_db)) -> JSONResponse:
+        request_obj: Request,
+        id: str,
+        user_id: Optional[UUID] = None,
+        search: Optional[str] = "",
+        page_mumber: Optional[int] = 1,
+        limit: Optional[int] = 50,
+        session: Session = Depends(get_db)) -> JSONResponse:
     """Get list of all transactions for an account number (id) 
     and search by transaction description"""
-    trans_account = account.get_by_account_number(db=session, account_number=id, user_id=user_id)
+    trans_account = account.get_by_account_number(
+        db=session, account_number=id, user_id=user_id)
     if trans_account is None:
         return JSONResponse({"error": "Account is not found"}, status_code=404)
     try:
         resp = transaction.get_by_transaction_account_id_and_search_param(db=session,
-                                                     account_id=trans_account.account_id,
-                                                     transaction_description=search,
-                                                     limit=limit, page_number=page_mumber)
+                                                                          account_id=trans_account.account_id,
+                                                                          transaction_description=search,
+                                                                          limit=limit, page_number=page_mumber)
     except ValueError as ex:
         return JSONResponse(f"{ex}", 400)
 

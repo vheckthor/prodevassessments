@@ -1,3 +1,4 @@
+"""transaction db model module"""
 import uuid
 from sqlalchemy import Column, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
@@ -8,6 +9,7 @@ from app.db.base_class import Base
 
 
 class Transaction(Base):
+    """Transaction db model class"""
     transaction_id: uuid.UUID = Column(
         UUID(as_uuid=True),
         primary_key=True,
@@ -16,11 +18,13 @@ class Transaction(Base):
         nullable=False
     )
     account_id = Column(
-        UUID(as_uuid=True), ForeignKey("account.account_id", ondelete="CASCADE"),
+        UUID(as_uuid=True), ForeignKey(
+            "account.account_id", ondelete="CASCADE"),
         nullable=False
     )
     transaction_type = Column(String, nullable=False)
-    transaction_amount = Column(Float, nullable=False, index=True, default=0.00)
+    transaction_amount = Column(
+        Float, nullable=False, index=True, default=0.00)
     user_ip = Column(String, nullable=False)
     user_location = Column(String, nullable=False)
     transaction_description = Column(String, nullable=False)

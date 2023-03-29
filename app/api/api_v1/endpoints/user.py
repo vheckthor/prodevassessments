@@ -16,7 +16,8 @@ from app.api.depends import get_db, get_current_active_user
 from app.schemas.user_schema import UserRequest, UserAuthRequest, UserResponse, UserSchema
 
 
-user_router = APIRouter(prefix="/users",dependencies=[Depends(get_db)], tags=["User"])
+user_router = APIRouter(
+    prefix="/users", dependencies=[Depends(get_db)], tags=["Users"])
 
 
 @user_router.post("", response_model=UserResponse, status_code=201)
@@ -103,8 +104,8 @@ async def delete_user(userid: str, session: Session = Depends(get_db)):
     logging.info("delete user")
     user_to_delete = user.get(db=session, id=userid)
     if user_to_delete is None:
-        return JSONResponse({"Error": "unable to delete user not found"}, status_code= 404)
+        return JSONResponse({"Error": "unable to delete user not found"}, status_code=404)
     deleted = user.delete(db=session, db_obj=user_to_delete) is not None
     if not deleted:
-        return JSONResponse({"Error": "unable to delete, an error occured"}, status_code= 400)
+        return JSONResponse({"Error": "unable to delete, an error occured"}, status_code=400)
     return JSONResponse({"success": "user deleted successfully"}, status_code=200)

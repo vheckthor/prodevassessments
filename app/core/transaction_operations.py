@@ -11,6 +11,7 @@ REQUEST_TIMEOUT = 10
 MAX_AMOUNT = sys.float_info.max
 IPIFY_BASE_URL = "https://api.ipify.org"
 
+
 def perform_credit_or_debit_operations(balance: float, amount: float,
                                        transaction_type: str) -> float:
     """
@@ -30,10 +31,12 @@ def perform_credit_or_debit_operations(balance: float, amount: float,
     if amount >= MAX_AMOUNT:
         raise ValueError(f"Amount {amount} is too large")
     if transaction_type == "credit" and amount > 0:
-        return  balance + amount
+        return balance + amount
     if amount > balance:
-        raise ValueError(f"Amount {amount} to withdraw is greater than current balance {balance}")
+        raise ValueError(
+            f"Amount {amount} to withdraw is greater than current balance {balance}")
     return balance - amount
+
 
 def get_user_ip(request_obj):
     """get ip from third party if available else get from request object"""
@@ -42,7 +45,6 @@ def get_user_ip(request_obj):
         ip_address = resp.text
         return ip_address
     return request_obj.client[0]
-
 
 
 def get_user_location_from_ip(ip_address: str):

@@ -20,6 +20,7 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+
 def get_authorization_scheme_param(authorization_header_value: str) -> Tuple[str, str]:
     if not authorization_header_value:
         return "", ""
@@ -35,7 +36,8 @@ def get_current_user(db: Session, request: Request) -> User:
 
     try:
         payload = jwt.decode(
-            token, settings.Settings().SECRET_KEY, algorithms=[security.ALGORITHM]
+            token, settings.Settings().SECRET_KEY, algorithms=[
+                security.ALGORITHM]
         )
         token_data = TokenPayload(**payload)
     except (jwt.JWTError, ValidationError) as error:
