@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel, root_validator, validator
+from pydantic import BaseModel, Field, root_validator, validator
 from app.core.account_number_generator import generate_random_account
 
 
@@ -15,8 +15,20 @@ class AccountRequest(BaseModel):
 
 
 class AccountResponse(BaseModel):
+    class Config():
+        orm_mode = True
+
     account_number: str
     account_type: str
+    account_date_created: str = Field(alias="date_created")
+    account_balance: float
+
+    @validator("account_date_created", pre=True)
+    @classmethod
+    def validate_transaction_date(cls, value):
+        string_date_time = value.strftime("%Y/%m/%d, %H:%M:%S")
+        return string_date_time
+
 
 
 class AllUserAccountResponse(BaseModel):
@@ -32,6 +44,7 @@ class AccountSchema(BaseModel):
     account_id: Optional[UUID]
     account_type: Optional[str]
     account_number: Optional[str]
+    account_balance: Optional[float]
     user_id: UUID
 
     @root_validator()

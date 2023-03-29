@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
-from app.crud.base import CrudBase 
+from app.crud.base import CrudBase
 from app.models.user import User
 from app.config.loggers import log_error
 

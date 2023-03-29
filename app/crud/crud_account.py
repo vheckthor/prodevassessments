@@ -10,9 +10,9 @@ from app.models.account import Account
 from app.config.loggers import log_error
 
 
-
 class CrudAccount(CrudBase[Account]):
-    def get_by_account_owner_id(self, db: Session,user_id: UUID, skip: int = 0, limit: int = 5,) -> Optional[List[Account]]:
+    def get_by_account_owner_id(self, db: Session, user_id: UUID,
+                                skip: int = 0, limit: int = 5,) -> Optional[List[Account]]:
         return (
             db.query(Account).filter(Account.user_id == user_id)
             .offset(skip)
@@ -20,16 +20,17 @@ class CrudAccount(CrudBase[Account]):
             .all()
         )
 
-    def get_by_account_number(self,db: Session,account_number: str, user_id: UUID) -> Optional[Account]:
+    def get_by_account_number(self, db: Session,
+                              account_number: str, user_id: UUID) -> Optional[Account]:
         return (
-            db.query(Account).filter(Account.account_number == account_number, Account.user_id == user_id).first()
+            db.query(Account).filter(Account.account_number ==
+                                     account_number, Account.user_id == user_id).first()
         )
-    
 
     def create(self, db: Session, *, obj_in) -> Account:
         db_obj = Account(
             account_id=uuid.uuid4(),
-            user_id = obj_in.user_id,
+            user_id=obj_in.user_id,
             account_number=obj_in.account_number,
             account_type=obj_in.account_type
         )
@@ -43,6 +44,7 @@ class CrudAccount(CrudBase[Account]):
         return db_obj
 
     def update(self, db: Session, *, db_obj: Account, obj_in) -> Account:
+        """The update is not commited until the transaction is completed by the other operation"""
         obj_data = jsonable_encoder(db_obj)
 
         if isinstance(obj_in, dict):
@@ -56,11 +58,10 @@ class CrudAccount(CrudBase[Account]):
 
         try:
             db.add(db_obj)
-            db.commit()
-            db.refresh(db_obj)
         except Exception as e_x:
             log_error(e_x)
             return None
         return db_obj
+
 
 account = CrudAccount(Account)

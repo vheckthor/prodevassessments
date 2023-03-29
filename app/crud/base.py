@@ -11,7 +11,6 @@ from app.config.loggers import log_error
 ModelType = TypeVar("ModelType", bound=Base)
 
 
-
 class CrudBase(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         """
