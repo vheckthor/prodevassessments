@@ -144,3 +144,4 @@ tmain.py
 **/plan
 # **/*.tfvars
 !**/.gitkeep
+app/.DS_Store
