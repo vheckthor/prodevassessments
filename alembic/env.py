@@ -27,8 +27,11 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 exclude_tables = []
-def include_object(object, name, type_, *args, **kwargs): # pylint: disable=unused-argument
+
+
+def include_object(object, name, type_, *args, **kwargs):  # pylint: disable=unused-argument
     return not (type_ == "table" and name in exclude_tables)
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -62,7 +65,8 @@ def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = settings.Settings().SQLALCHEMY_DATABASE_URI
+    configuration["sqlalchemy.url"] = settings.Settings(
+    ).SQLALCHEMY_DATABASE_URI
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",

@@ -1,3 +1,4 @@
+"""Accound db model module"""
 import uuid
 from sqlalchemy import Column, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
@@ -8,6 +9,7 @@ from app.db.base_class import Base
 
 
 class Account(Base):
+    """Account db  model class"""
     account_id: uuid.UUID = Column(
         UUID(as_uuid=True),
         primary_key=True,
