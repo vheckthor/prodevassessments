@@ -15,6 +15,7 @@ from app.core.security import create_access_token
 from app.config.loggers import log_error
 from app.api.depends import get_db
 from app.schemas.account_schema import AccountRequest, AccountResponse, AccountSchema, AllUserAccountResponse
+from app.schemas.transaction_schema import TransactionRequest, TransactionResponse
 from app.core.security_decorators import auth_required
 
 account_router = APIRouter(prefix="/accounts",dependencies=[Depends(get_db)])
@@ -99,3 +100,13 @@ async def delete_account(account_number: str,
     if not deleted:
         return JSONResponse({"Error": "unable to delete, an error occured"}, status_code=400)
     return JSONResponse({"success": "account deleted successfully"}, status_code=200)
+
+
+@account_router.post("/{id}/transactions",response_model=TransactionResponse, status_code=201)
+async def perform_transactions(payload: TransactionRequest,
+                            request_obj: Request,
+                            user_id: Optional[UUID] = None,
+                            session: Session = Depends(get_db)):
+    logging.info("delete account")
+    ip = request_obj.client
+    print(ip)

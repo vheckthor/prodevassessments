@@ -12,7 +12,7 @@ from app.config.loggers import log_error
 
 
 class CrudAccount(CrudBase[Account]):
-    def get_by_account_owner_id(self,db: Session,user_id: UUID, skip: int = 0, limit: int = 5,) -> Optional[List[Account]]:
+    def get_by_account_owner_id(self, db: Session,user_id: UUID, skip: int = 0, limit: int = 5,) -> Optional[List[Account]]:
         return (
             db.query(Account).filter(Account.user_id == user_id)
             .offset(skip)

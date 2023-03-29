@@ -21,11 +21,7 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str = os.environ.get("FIRST_SUPERUSER_PASSWORD", "password@123")
     FIRST_SUPERUSER_PHONE: str = os.environ.get("FIRST_SUPERUSER_PHONE", "07039466998")
     FIRST_SUPERUSER_EMAIL: str = os.environ.get("FIRST_SUPERUSER_EMAIL", "adebayovicktor@gmail.com")
-    # POSTGRES_SERVER: Optional[str] = os.environ.get("POSTGRES_SERVER", "")
-    # POSTGRES_PORT: Optional[str] = os.environ.get("POSTGRES_PORT","")
-    # POSTGRES_USER: Optional[str] = os.environ.get("POSTGRES_USER","")
-    # POSTGRES_PASSWORD: Optional[str] = os.environ.get("POSTGRES_PASSWORD", "")
-    # POSTGRES_DB: Optional[str] = os.environ.get("POSTGRES_DB", "")
+    IPIFY_API_KEY: str = os.environ.get("IPIFY_API_KEY", "")
     SQLALCHEMY_DATABASE_URI: Union[Optional[engine.url.URL], Optional[str]] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
