@@ -16,18 +16,25 @@ The choice of Database is PostGreSQL.
 Please create a python based REST server with the following resources and endpoints. Please use your preferred python web stack and database, however we would prefer you to use Flask and postgres. Each endpoint should have the required object and database model where required, correct validation of inputs, unit tests that test against the REST endpoints and make use of mocked third party dependencies where required. Each endpoint should be documented with proper REST documentation accessible via a documentation endpoint.
 Resources
 
-- /api/users
-● Create, Retrieve, Update, Delete API with the required object and database model offering user first name, last name, email, phone number, password.
-- /api/accounts
-● This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
-● Create, Retrieve, Update, Delete API with the required object and database model offering account name.
-- /api/accounts/{id}/transactions
-● This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
-● Create credit and debit transaction API representing deposits and withdrawals against the account in the URL. Model should include at least an amount and a description of the transaction as a string as well as the user's IP at time of the request. This should be retrieved from <https://www.ipify.org/> for each request. ipify.org should be mocked in the tests.
-● List of transactions supporting paging and search by transaction description.
-- /api/accounts/{id}
-● This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
-● Single get against an id should return the account identifiers and a balance of the
+### /api/users
+
+- Create, Retrieve, Update, Delete API with the required object and database model offering user first name, last name, email, phone number, password.
+
+### /api/accounts
+
+- This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
+- Create, Retrieve, Update, Delete API with the required object and database model offering account name.
+
+### /api/accounts/{id}/transactions
+
+- This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
+- Create credit and debit transaction API representing deposits and withdrawals against the account in the URL. Model should include at least an amount and a description of the transaction as a string as well as the user's IP at time of the request. This should be retrieved from <https://www.ipify.org/> for each request. ipify.org should be mocked in the tests.
+- List of transactions supporting paging and search by transaction description.
+
+### /api/accounts/{id}
+
+- This API should be “authenticated” defined as requiring the user id and password in the HTTP header of your choice (plain text is fine) and otherwise should return a 403.
+- Single get against an id should return the account identifiers and a balance of the
 account as well as the count of total transactions in the current account.
 
 ## Features
