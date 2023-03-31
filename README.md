@@ -115,4 +115,4 @@ python -m unittest discover app "*_test.py"
 ## Authentication
 
 - for routes that require authentication, a url (/users/authenticate) in the users router has been provided to get the jwt token that would be passed in the header for all routes requiring authentication. The user must be created before calling the auth route.
-`Authorization : bearer the_jwt_token_gotten_from_the_auth_route`
+  `Authorization : bearer the_jwt_token`
