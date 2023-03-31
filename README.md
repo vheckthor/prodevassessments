@@ -66,8 +66,9 @@ SECRET_KEY        | yoursecretkey
 - To run the project
 
 ```bash
- uvicorn app.main:app --reload --port 8001
+ uvicorn app.main:app
 ```
+use ` --reload` to run in auto-reload mode and `--port`  to specify port number
 ## Running Tests
 To run the test, make sure the .env files are setup correctly and use the command below
 
