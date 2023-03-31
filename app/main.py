@@ -1,3 +1,4 @@
+"""Main module for app entry"""
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.api.api_v1.endpoints.user import user_router

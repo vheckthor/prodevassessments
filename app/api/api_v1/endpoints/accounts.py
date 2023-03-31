@@ -1,3 +1,4 @@
+"""Account router module"""
 import logging
 from typing import Optional
 from uuid import UUID
@@ -14,7 +15,8 @@ from app.core.transaction_operations import (
     get_user_ip, get_user_location_from_ip, perform_credit_or_debit_operations
 )
 from app.api.depends import get_db
-from app.schemas.account_schema import AccountRequest, AccountResponse, AccountSchema, AllUserAccountResponse
+from app.schemas.account_schema import (
+    AccountRequest, AccountResponse, AccountSchema, AllUserAccountResponse)
 from app.schemas.transaction_schema import (
     TransactionRequest, TransactionSchema, AllAccountTransactionResponse)
 from app.core.security_decorators import auth_required
@@ -59,14 +61,14 @@ async def get_all_account(
     response = account.get_by_account_owner_id(db=session, user_id=user_id)
     if response is None:
         return JSONResponse({"Error": "accounts not found"}, status_code=404)
-    resp = [AccountResponse(account_number=acc.account_number,
-                            account_type=acc.account_type).dict() for acc in response]
+    resp = [AccountResponse.from_orm(acc).dict() for acc in response]
     json_response = resp
     return JSONResponse(json_response, status_code=200)
 
 
 @account_router.get("/{id}",
                     response_model=AccountResponse, status_code=200)
+@auth_required
 async def get_account(id: str,
                       request_obj: Request,
                       user_id: Optional[UUID] = None,
@@ -88,16 +90,16 @@ async def get_account(id: str,
     return JSONResponse(json_response, status_code=200)
 
 
-@account_router.delete("/{account_number}", status_code=200)
+@account_router.delete("/{id}", status_code=200)
 @auth_required
-async def delete_account(account_number: str,
+async def delete_account(id: str,
                          request_obj: Request,
                          user_id: Optional[UUID] = None,
                          session: Session = Depends(get_db)):
     """ delete account api endpoint"""
     logging.info("delete account")
     account_to_delete = account.get_by_account_number(
-        db=session, account_number=account_number, user_id=user_id)
+        db=session, account_number=id, user_id=user_id)
     if account_to_delete is None:
         return JSONResponse({"Error": "unable to delete account not found"}, status_code=404)
     deleted = account.delete(db=session, db_obj=account_to_delete) is not None

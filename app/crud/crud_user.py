@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import update as update_user
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
@@ -44,14 +45,11 @@ class CrudUser(CrudBase[User]):
             del update_data["password"]
             update_data["hashed_password"] = hashed_password
 
-        for field in obj_data:
-            if field in update_data:
-                setattr(db_obj, field, update_data[field])
 
         try:
-            db.add(db_obj)
+            query = update_user(User).where(User.email == obj_in.email).values(update_data)
+            db.execute(query)
             db.commit()
-            db.refresh(db_obj)
         except Exception as e_x:
             log_error(e_x)
             return None

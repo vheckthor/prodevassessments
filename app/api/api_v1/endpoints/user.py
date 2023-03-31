@@ -1,3 +1,4 @@
+"""user router module"""
 import logging
 import uuid
 from datetime import timedelta
@@ -13,7 +14,8 @@ from app.config import settings
 from app.core.security import create_access_token
 from app.config.loggers import log_error
 from app.api.depends import get_db, get_current_active_user
-from app.schemas.user_schema import UserRequest, UserAuthRequest, UserResponse, UserSchema
+from app.schemas.user_schema import (
+    UserRequest, UserAuthRequest, UserResponse, UserSchema, UserUpdateSchema)
 
 
 user_router = APIRouter(
@@ -42,8 +44,8 @@ async def create_user(request: UserRequest, session: Session = Depends(get_db)):
 async def update_user(request: UserRequest, request_obj: Request, session: Session = Depends(get_db)):
     """ update user api endpoint"""
     logging.info("Updating user")
-    data = {**request.dict(), "id": uuid.uuid4()}
-    request_data = UserSchema(**data)
+    data = {**request.dict()}
+    request_data = UserUpdateSchema(**data)
     try:
         current_user = get_current_active_user(session, request_obj)
     except (ValueError, ValidationError, Exception) as e_x:
@@ -62,7 +64,7 @@ async def update_user(request: UserRequest, request_obj: Request, session: Sessi
     return JSONResponse(json_response, status_code=202)
 
 
-@user_router.post("/authenticate", status_code=202)
+@user_router.post("/authenticate", status_code=200)
 async def authenticate_user(request: UserAuthRequest, session: Session = Depends(get_db)):
     """ authenticate user api endpoint"""
     logging.info("authenticate user")
@@ -86,7 +88,7 @@ async def authenticate_user(request: UserAuthRequest, session: Session = Depends
 
 
 @user_router.get("/{userid}", response_model=UserResponse, status_code=200)
-async def get_user(userid: str, session: Session = Depends(get_db)):
+async def get_user(userid: uuid.UUID, session: Session = Depends(get_db)):
     """ get user api endpoint"""
     logging.info("get user")
     response = user.get(db=session, id=userid)
@@ -99,7 +101,7 @@ async def get_user(userid: str, session: Session = Depends(get_db)):
 
 
 @user_router.delete("/{userid}", response_model=UserResponse, status_code=200)
-async def delete_user(userid: str, session: Session = Depends(get_db)):
+async def delete_user(userid: uuid.UUID, session: Session = Depends(get_db)):
     """ delete user api endpoint"""
     logging.info("delete user")
     user_to_delete = user.get(db=session, id=userid)

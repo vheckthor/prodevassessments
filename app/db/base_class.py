@@ -12,6 +12,7 @@ class Base:
     __name__: str
 
     @declared_attr
+    @classmethod
     def __tablename__(cls) -> str:
         return "_".join(
             sub(

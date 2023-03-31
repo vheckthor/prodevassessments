@@ -23,6 +23,13 @@ class UserResponse(BaseModel):
     email: str
     phone_number: str
 
+class UserUpdateSchema(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+    phone_number: str
+    password: str
+    isactive: Optional[bool]
 
 class UserSchema(BaseModel):
     class Config:
