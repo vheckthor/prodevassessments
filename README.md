@@ -55,13 +55,13 @@ poetry install
 
 | Key             |    Value    |
 | --------------  | ----------- |
-POSTGRES_SERVER     localhost
-POSTGRES_USER       postgres
-POSTGRES_PASSWORD   your_postres_password
-POSTGRES_DB         your_db_name
-PROJECT_NAME        Prodev
-IPIFY_API_KEY       Not_needed
-SECRET_KEY          yoursecretkey
+POSTGRES_SERVER   | localhost
+POSTGRES_USER     | postgres
+POSTGRES_PASSWORD | your_postres_password
+POSTGRES_DB       | your_db_name
+PROJECT_NAME      | Prodev
+IPIFY_API_KEY     | Not_needed
+SECRET_KEY        | yoursecretkey
 
 - To run the project
 
