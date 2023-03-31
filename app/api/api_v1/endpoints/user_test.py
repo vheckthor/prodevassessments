@@ -144,3 +144,7 @@ class TestUser(BaseTest):
 
     def doCleanups(self) -> None:
         self.session.db_session.close()
+
+
+if __name__ == '__main__':
+    unittest.main()
